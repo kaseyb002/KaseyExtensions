@@ -3,21 +3,23 @@ import SwiftUI
 
 extension View {
     public func subscribeToUpdates(
-        _ subscribeToUpdates: @escaping (_ subscriptions: inout Set<AnyCancellable>) -> Void
+        _ makeSubscriptions: @escaping () async -> Set<AnyCancellable>
     ) -> some View {
-        self.modifier(ViewSubscriptionsModifier(subscribeToUpdates: subscribeToUpdates))
+        modifier(ViewSubscriptionsModifier(makeSubscriptions: makeSubscriptions))
     }
 }
 
 private struct ViewSubscriptionsModifier: ViewModifier {
     @State private var subscriptions: Set<AnyCancellable> = []
-    let subscribeToUpdates: (_ subscriptions: inout Set<AnyCancellable>) -> Void
+    let makeSubscriptions: () async -> Set<AnyCancellable>
 
     func body(content: Content) -> some View {
         content
             .onViewDidLoad {
                 subscriptions.removeAll()
-                subscribeToUpdates(&self.subscriptions)
+                Task {
+                    subscriptions = await makeSubscriptions()
+                }
             }
     }
 }
