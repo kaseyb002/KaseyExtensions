@@ -73,17 +73,4 @@ extension Array {
         }
         return self[index]
     }
-    
-//    public mutating func mutate<Value>(
-//        with mutation: (inout Element) -> Void,
-//        where matches: (Element) -> Bool
-//    ) {
-//        for (index, element) in enumerated() {
-//            if matches(element) {
-//                var updatedElement: Element = element
-//                mutation(&updatedElement)
-//                self[index] = updatedElement
-//            }
-//        }
-//    }
 }
