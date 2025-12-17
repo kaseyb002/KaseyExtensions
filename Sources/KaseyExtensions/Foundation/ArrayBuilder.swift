@@ -23,4 +23,10 @@ extension Array {
     public init(@ArrayBuilder<Element> builder: () -> [Element]) {
         self = builder()
     }
+    
+    public init(
+        @ArrayBuilder<Element> asyncBuilder: () async -> [Element]
+    ) async {
+        self = await asyncBuilder()
+    }
 }
